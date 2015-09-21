@@ -1,0 +1,20 @@
+{
+  "name": "bit0/todo",
+  "description": "A little test with Compsoer, resuld should be todo application.",
+  "minimum-stability": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ishan Jain / b1thunt3r",
+      "email": "ishan@jain.se"
+    }
+  ],
+  "require": {
+    "klein/klein": "dev-master"
+  }
+  "autoload": {
+    "psr-4": {
+      "Bit0\\": ["src/"]
+    }
+  }
+}
