@@ -16,7 +16,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Bit0\\": ["src/Bit0/"]
+      "Bit0\\": ["src/"]
     }
   }
 }

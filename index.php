@@ -29,7 +29,7 @@ $klein->respond( [
     $id = $params['id'];
 
   $body = call_user_func_array( [
-    new $controller( $response, $app, $service, realpath( "./src/Bit0/ToDo/Views/" ) ),
+    new $controller( $response, $app, $service ),
     $action
   ], [ $id ] );
 

@@ -23,34 +23,33 @@ namespace Bit0\ToDo\Logic {
    * @property App $App
    * @property ServiceProvider $Service
    */
-
   class Controllers {
     var $Response;
     var $App;
     var $Service;
-    var $ViewPath;
 
-    public function __construct( Response $response, App $app, ServiceProvider $service, $viewPath ) {
+    public function __construct( Response $response, App $app, ServiceProvider $service ) {
       $this->Response = $response;
       $this->App      = $app;
       $this->Service  = $app;
-      $this->ViewPath = $viewPath;
     }
 
-    public function view( $view, array $model = [] ) {
+    public function view( $view, array $model = [ ] ) {
       if ( strpos( $view, "/" ) === false ) {
         preg_match(
           '/Bit0\/ToDo\/Controllers\/(?<controller>\w+)Controller$/',
           str_replace( "\\", "/", get_class( $this ) ),
           $matches );
-        $view = $matches['controller']."/".$view.".twig";
+        $view = $matches['controller'] . "/" . $view . ".twig";
       }
 
-      /** @var \Klein\App $app */
-      $twig = new Twig_Environment( new Twig_Loader_Filesystem( $this->ViewPath ) );
 
-      $template = $twig->loadTemplate($view);
-      return $template->render($model);
+      /** @var \Klein\App $app */
+      $twig = new Twig_Environment( new Twig_Loader_Filesystem( realpath( "./src/ToDo/Views/" ) ) );
+
+      $template = $twig->loadTemplate( $view );
+
+      return $template->render( $model );
     }
   }
 
