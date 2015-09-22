@@ -1,22 +1,49 @@
 <?php
+use Klein\App;
+use Klein\Klein;
+use Klein\Request;
+use Klein\Response;
+use Klein\ServiceProvider;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-$klein = new \Klein\Klein();
+$klein = new Klein();
 
-//$klein->respond("GET", "/swati", function () {
-//  return "Hello Swati!";
-//});
+$klein->respond( [
+  "GET",
+  "POST"
+], "/[:controller]?/?[:action]?/?[i:id]?", function ( Request $request, Response $response, ServiceProvider $service, App $app ) use ( $klein ) {
+  $controller = "Bit0\\ToDo\\Controllers\\HomeController";
+  $action     = "index";
+  if ( isset( $request->controller ) ) {
+    $controller = "Bit0\\ToDo\\Controllers\\" . ucfirst( $request->controller ) . "Controller";
+  }
+  if ( isset( $request->action ) ) {
+    $action = $request->action;
+  }
 
-$klein->respond('GET', '/[:controller]?/?[:action]?/?[i:id]?', function($request, $response, $service, $app) use($klein) {
-  var_dump($request);
-});
+  $params = $request->params();
 
-$klein->onHttpError(function($code, $router) {
-  switch ($code) {
+  $id = null;
+  if (array_key_exists("id", $params))
+    $id = $params['id'];
+
+  $body = call_user_func_array( [
+    new $controller( $response, $app, $service, realpath( "./src/Bit0/ToDo/Views/" ) ),
+    $action
+  ], [ $id ] );
+
+  $response->body($body);
+}
+);
+
+$klein->onHttpError( function ( $code, $router ) {
+  switch ( $code ) {
     case 404:
-      $router->response()->body('U lost lad?');
+      /** @var \Klein\Klein $router */
+      $router->response()->body( 'Oops! These are not the droids you are looking for.' );
       break;
   }
-});
+} );
 
 $klein->dispatch();
