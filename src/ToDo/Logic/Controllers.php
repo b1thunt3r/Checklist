@@ -34,25 +34,21 @@ namespace Bit0\ToDo\Logic {
       $this->Service  = $app;
     }
 
-    public function view( $view, array $model = [ ] ) {
+    public function view( $view, array $model = [ ], $type = "html"  ) {
       if ( strpos( $view, "/" ) === false ) {
         preg_match(
           '/Bit0\/ToDo\/Controllers\/(?<controller>\w+)Controller$/',
           str_replace( "\\", "/", get_class( $this ) ),
           $matches );
-        $view = $matches['controller'] . "/" . $view . ".twig";
+        $view = $matches['controller'] . "/" . $view . "." . $type . ".twig";
       }
 
-
-      /** @var \Klein\App $app */
-      $twig = new Twig_Environment( new Twig_Loader_Filesystem( realpath( "./src/ToDo/Views/" ) ) );
-
+      $twig = new Twig_Environment( new Twig_Loader_Filesystem( realpath( "./src/ToDo/Views/" ) ), [
+        'cache' => realpath("./tmp/cache/twig"),
+        'auto_reload' => false
+      ] );
       $template = $twig->loadTemplate( $view );
-
       return $template->render( $model );
     }
   }
-
-
 }
-
