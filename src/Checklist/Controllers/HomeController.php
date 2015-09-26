@@ -6,13 +6,13 @@
  * Time: 22:16
  */
 
-namespace Bit0\ToDo\Controllers {
-  use Bit0\ToDo\Logic\Controllers;
+namespace Bit0\Checklist\Controllers {
+  use Bit0\Checklist\Logic\Controllers;
 
 
   /**
    * Class HomeController
-   * @package Bit0\ToDo\Controllers
+   * @package Bit0\Checklist\Controllers
    */
   class HomeController extends Controllers {
     public function index($id = null) {

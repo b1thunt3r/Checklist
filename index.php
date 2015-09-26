@@ -1,5 +1,5 @@
 <?php
-use Bit0\ToDo\Controllers\HomeController;
+use Bit0\Checklist\Controllers\HomeController;
 use Klein\App;
 use Klein\Klein;
 use Klein\Request;
@@ -37,3 +37,8 @@ $klein->onHttpError( function ( $code, Klein $router ) {
 } );
 
 $klein->dispatch();
+
+// TODO: Add DI
+// TODO: object(className)?
+// TODO: Add db connection (may fs based db)
+// TODO: Add Angular

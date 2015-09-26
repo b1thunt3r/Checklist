@@ -6,7 +6,7 @@
  * Time: 22:52
  */
 
-namespace Bit0\ToDo\Logic {
+namespace Bit0\Checklist\Logic {
 
 
   use Klein\App;
@@ -17,7 +17,7 @@ namespace Bit0\ToDo\Logic {
 
   /**
    * Class Controllers
-   * @package Bit0\ToDo\Logic
+   * @package Bit0\Checklist\Logic
    *
    * @property Response $Response
    * @property App $App
@@ -37,13 +37,13 @@ namespace Bit0\ToDo\Logic {
     public function view( $view, array $model = [ ], $type = "html"  ) {
       if ( strpos( $view, "/" ) === false ) {
         preg_match(
-          '/Bit0\/ToDo\/Controllers\/(?<controller>\w+)Controller$/',
+          '/Bit0\/Checklist\/Controllers\/(?<controller>\w+)Controller$/',
           str_replace( "\\", "/", get_class( $this ) ),
           $matches );
         $view = $matches['controller'] . "/" . $view . "." . $type . ".twig";
       }
 
-      $twig = new Twig_Environment( new Twig_Loader_Filesystem( realpath( "./src/ToDo/Views/" ) ), [
+      $twig = new Twig_Environment( new Twig_Loader_Filesystem( realpath( "./src/Checklist/Views/" ) ), [
         'cache' => realpath("./tmp/cache/twig"),
         'auto_reload' => false
       ] );
