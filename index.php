@@ -13,10 +13,43 @@ $klein = new Klein();
 $klein->respond( [
   "GET",
   "POST"
-], "/?[:controller]?/[:action]?/[**:trail]?", function ( Request $request, Response $response, ServiceProvider $service, App $app ) use ( $klein ) {
-  $controller = str_replace( 'Home', ucfirst( $request->param('controller', 'home') ) , HomeController::class );
-  $action     = $request->param('action', 'index');
-  $trail      = explode('/', $request->param('trail', null));
+], "/?[:controller]?/[**:trail]?", function ( Request $request, Response $response, ServiceProvider $service, App $app ) use ( $klein ) {
+  $controller = ucfirst( strtolower( $request->param( 'controller', 'home' ) ) );
+  $trailRaw   = $request->param( 'trail', [ ] );
+  $trail      = explode( '/', $trailRaw );
+
+  if ( $controller == "Static" ) {
+    $name = end( $trail );
+    $ext  = end( explode( ".", $name ) );
+
+    $mime = "text/plain";
+    switch ( $ext ) {
+      case "css":
+        $mime = "text/css";
+        break;
+      case "js":
+        $mime = "text/javascript";
+        break;
+      case "jpg":
+        $mime = "image/jpeg";
+        break;
+      case "png":
+        $mime = "image/png";
+        break;
+    }
+
+    $response->file( realpath( "./src/Checklist/Views/Static/" . $trailRaw ), $name, $mime );
+
+    return;
+  }
+
+  $controller = str_replace( 'Home', ucfirst( strtolower( $request->param( 'controller', 'home' ) ) ), HomeController::class );
+
+  if ( count( $trail ) > 0 ) {
+    $action = array_shift( $trail );
+  } else {
+    $action = "index";
+  }
 
   $body = call_user_func_array( [
     new $controller( $response, $app, $service ),
@@ -26,6 +59,7 @@ $klein->respond( [
   $response->body( $body );
 }
 );
+
 
 $klein->onHttpError( function ( $code, Klein $router ) {
   switch ( $code ) {
